@@ -10,7 +10,7 @@ from schemas import ValidationSchemas
 
 app = Flask(__name__)
 
-GROUPS_URL = "http://127.0.0.1:5001"
+
 
 app.config['SECRET_KEY'] = "opop"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
