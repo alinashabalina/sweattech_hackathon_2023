@@ -1,7 +1,12 @@
-from flask import Flask, jsonify
-from flask_migrate import Migrate
+import json
+import jsonschema
+import sqlalchemy
 
-from models import init_app, db
+from flask_migrate import Migrate
+from flask import Flask, jsonify, request
+
+from models import init_app, db, User
+from schemas import ValidationSchemas
 
 app = Flask(__name__)
 
@@ -12,7 +17,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database/user.db'
 init_app(app)
 migrate = Migrate(app, db)
-
 
 @app.route("/")
 def index_page():
