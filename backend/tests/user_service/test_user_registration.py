@@ -7,8 +7,19 @@ def test_create_user_successful():
 
     assert r.status_code == 201
     assert r.json()["result"]["username"] == "test"
-    assert r.json()["email"]["username"] == "hello@world.com"
-    assert r.json()["password"]["username"] == "12345"
+    assert r.json()["result"]["email"] == "hello@world.com"
+    assert r.json()["result"]["password"] == "12345"
+    assert r.json()["message"] == "User created"
+
+def test_create_user_unsuccessful_username_missing():
+    data = {"email": "hello@world.com", "password": "12345"}
+    r = UserService().create_a_user(data=data)
+
+    assert r.status_code == 201
+    assert r.json()["result"]["username"] == ""
+    assert r.json()["result"]["email"] == "hello@world.com"
+    assert r.json()["result"]["password"] == "12345"
+    assert r.json()["message"] == "User created"
 
 def _checks_400(r):
     assert r.status_code == 400
@@ -24,15 +35,8 @@ def test_create_user_unsuccessful_password_missing():
     data = {"username": "test", "email": "hello@world.com"}
     result = UserService().create_a_user(data=data)
 
-    _checks_400(result)
-
-def test_create_user_unsuccessful_username_missing():
-    data = {"email": "hello@world.com", "password": "12345"}
-    r = UserService().create_a_user(data=data)
-
-    assert r.status_code == 201
-    assert r.json()["result"]["username"] == ""
-
+    assert result.status_code == 400
+    assert result.json()["message"] == 'Make sure you have filled the password field'
 
 def test_create_user_unsuccessful_extra_field():
     data = {"username": "test", "email": "hello@world.com", "password": "12345"}
