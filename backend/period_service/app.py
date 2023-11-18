@@ -6,7 +6,7 @@ from flask import Flask, jsonify, request
 from flask_migrate import Migrate
 from sqlalchemy import select
 
-from models import init_app, db, DayView, Trainings, TrainingRecommendations, User
+from models import init_app, db, DayView, Trainings, TrainingRecommendations, User, Questionnaire
 from schemas import ValidationSchemas
 
 app = Flask(__name__)
@@ -28,7 +28,6 @@ def index_page():
 def create_user():
     try:
         user = User()
-        jsonschema.validate(instance=json.loads(request.data), schema=ValidationSchemas.UserCreateSchema)
         user.email = json.loads(request.data)["email"]
         user.password = json.loads(request.data)["password"]
         if "username" not in json.loads(request.data).keys():
@@ -38,6 +37,52 @@ def create_user():
         db.session.add(user)
         db.session.commit()
         response = {"message": "User created", "result": user.user_info()}
+        return jsonify(response), 201
+    except sqlalchemy.exc.IntegrityError:
+        db.session.rollback()
+        result = db.session.execute(select(User).filter_by(email=json.loads(request.data)["email"]))
+        response = {
+            "message": f"This user already exists",
+        }
+        return jsonify(response), 400
+    except KeyError as e:
+        db.session.rollback()
+        if len(e.args) != 0:
+            response = {
+                "message": f"Make sure you have filled the {e.args[0]} field",
+            }
+        else:
+            response = {
+                "message": "Oops something went wrong. Check that all the fields are filled",
+            }
+        return jsonify(response), 400
+    except jsonschema.exceptions.SchemaError as e:
+        db.session.rollback()
+        response = {
+            "message": f"Check that all the fields are filled {e.json_path}",
+        }
+        return jsonify(response), 400
+    except jsonschema.exceptions.ValidationError as e:
+        db.session.rollback()
+        response = {
+            "message": f"Validation error: {e.message}",
+        }
+        return jsonify(response), 400
+
+
+@app.route("/question", methods=["POST"])
+def question_user():
+    try:
+        questionnaire = Questionnaire()
+        questionnaire.user_id = json.loads(request.data)["user_id"]
+        questionnaire.username = json.loads(request.data)["username"]
+        questionnaire.date_of_birth = json.loads(request.data)["date_of_birth"]
+        questionnaire.hormone_state = json.loads(request.data)["hormone_state"]
+        questionnaire.day_of_cycle = json.loads(request.data)["day_of_cycle"]
+        questionnaire.goal_list = json.loads(request.data)["goal_list"]
+        db.session.add(questionnaire)
+        db.session.commit()
+        response = {"message": "User created", "result": questionnaire.user_questionnaire()}
         return jsonify(response), 201
     except sqlalchemy.exc.IntegrityError:
         db.session.rollback()

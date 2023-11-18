@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
 
 db = SQLAlchemy()
-
 
 def init_app(app):
     db.app = app
@@ -26,11 +26,12 @@ class User(db.Model):
 
 class Questionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False)
-    date_of_birth = db.Column(db.String, nullable=False)
-    hormone_state = db.Column(db.String(255), nullable=False)
-    day_of_cycle = db.Column(db.Integer, nullable=False)
-    goal_list = db.Column(db.String(255), nullable=False)
+    user_id = db.Column(db.Integer, ForeignKey("user.id"))
+    username = db.Column(db.String(255))
+    date_of_birth = db.Column(db.String)
+    hormone_state = db.Column(db.String(255))
+    day_of_cycle = db.Column(db.Integer)
+    goal_list = db.Column(db.String(255))
 
     def user_questionnaire(self):
         return {
