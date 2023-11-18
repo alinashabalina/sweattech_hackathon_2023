@@ -1,0 +1,18 @@
+ ul{
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+    background-color: #E9DEF3;
+    padding: 30px;
+    margin: 0;
+}
+
+li{
+    list-style: none;
+}
+
+.link{
+     text-decoration:none;
+ }

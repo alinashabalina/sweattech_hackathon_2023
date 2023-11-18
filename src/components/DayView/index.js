@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import "./DayView.css"
 export default function DayView() {
     const [submitted, setSubmitted] = useState(false);
 
@@ -63,6 +63,7 @@ export default function DayView() {
     {submitted && 
     <>
     <h3>Play the video:</h3>
+    <iframe className='video' width={400} height={315} src="https://www.youtube.com/embed/g_tea8ZNk5A?si=Lnu60c_2g-cJMtkJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </>}
     </>
   )
