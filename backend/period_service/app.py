@@ -1,17 +1,11 @@
 import json
-import random
-import string
-from datetime import datetime
-from functools import wraps
 
 import jsonschema
-import requests
-import sqlalchemy
 from flask import Flask, jsonify, request
 from flask_migrate import Migrate
 from sqlalchemy import select
 
-from models import init_app, db, DayView, Trainings
+from models import init_app, db, DayView, Trainings, TrainingRecommendations
 from schemas import ValidationSchemas
 
 app = Flask(__name__)
@@ -35,16 +29,12 @@ def set_a_day():
         day_view = DayView()
         jsonschema.validate(instance=json.loads(request.data), schema=ValidationSchemas.DayCreateSchema)
         day_view.user_id = json.loads(request.data)["user_id"]
-        day_view.day_id = json.loads(request.data)["day_id"]
+        day_view.date = json.loads(request.data)["date"]
         day_view.day_energy = json.loads(request.data)["day_energy"]
         day_view.period_day_correct = json.loads(request.data)["period_day_correct"]
         day_view.training_type = json.loads(request.data)["training_type"]
-        if "period_day_set" in json.loads(request.data).keys():
-            day_view.period_day_set = json.loads(request.data)["period_day_set"]
-        else:
-            day_view.period_day_set = False
         if "feedback" not in json.loads(request.data).keys():
-            day_view.period_day_set = "no yet set"
+            day_view.period_day_set = "not yet set"
         db.session.add(day_view)
         db.session.commit()
         response = {"message": "Day successfully set", "result": day_view.day_info()}
@@ -78,10 +68,10 @@ def set_a_day():
         return jsonify(response), 400
 
 
-@app.route("/day/info/<user_id>/<day_id>", methods=["GET"])
-def get_user_day(user_id, day_id):
+@app.route("/day/info/<user_id>/<date>", methods=["GET"])
+def get_user_day(user_id, date):
     try:
-        day_select = db.session.execute(select(DayView).filter_by(user_id=user_id).filter_by(day_id=day_id))
+        day_select = db.session.execute(select(DayView).filter_by(user_id=user_id).filter_by(date=date))
         day_selected = next(day_select)[0]
         response = {
             "message": "Info successfully acquired",
@@ -94,17 +84,17 @@ def get_user_day(user_id, day_id):
         }
         return jsonify(response), 400
 
+
 @app.route("/training/create", methods=["POST"])
 def post_a_training():
     try:
         training = Trainings()
-        jsonschema.validate(instance=json.loads(request.data), schema=ValidationSchemas.DayCreateSchema)
         training.name = json.loads(request.data)["name"]
         training.energy_level = json.loads(request.data)["energy_level"]
         training.link = json.loads(request.data)["link"]
         db.session.add(training)
         db.session.commit()
-        response = {"message": "Day successfully set", "result": day_view.day_info()}
+        response = {"message": "Day successfully set", "result": training.training_info()}
         return jsonify(response), 201
     except KeyError as e:
         db.session.rollback()
@@ -135,19 +125,25 @@ def post_a_training():
         return jsonify(response), 400
 
 
-@app.route("/day/recommend/<user_id>/<day_id>", methods=["GET"])
-def recommend_user_training(user_id, day_id):
+@app.route("/day/recommend/<user_id>/<date>", methods=["GET"])
+def recommend_user_training(user_id, date):
     try:
-        day_select = db.session.execute(select(DayView).filter_by(user_id=user_id).filter_by(day_id=day_id))
+        day_select = db.session.execute(select(DayView).filter_by(user_id=user_id).filter_by(date=date))
         day_select = next(day_select)[0]
-        training = db.session.execute(select(Trainings).filter_by(energy_level=day_select.day_info()["energy_level"]))
+        training = db.session.execute(select(Trainings).filter_by(energy_level=day_select.day_info()["day_energy"]))
+        training = next(training)[0]
+        recommendation = TrainingRecommendations()
+        recommendation.training_id = training.training_info()["id"]
+        recommendation.user_id = user_id
+        db.session.add(recommendation)
+        db.session.commit()
         response = {
             "message": "Info successfully acquired",
-            "result": training.training_recommended()
+            "result": training.training_info()
         }
         return jsonify(response), 200
     except StopIteration:
         response = {
-            "message": "Oops something went wrong",
+            "message": "The training you're looking for is missing",
         }
         return jsonify(response), 400
