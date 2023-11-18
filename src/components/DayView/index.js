@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import "./DayView.css"
-<<<<<<< HEAD
-=======
 
->>>>>>> 402be40 (commit)
 export default function DayView() {
     const [submitted, setSubmitted] = useState(false);
 
