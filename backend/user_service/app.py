@@ -10,8 +10,6 @@ from schemas import ValidationSchemas
 
 app = Flask(__name__)
 
-
-
 app.config['SECRET_KEY'] = "opop"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./database/user.db'
