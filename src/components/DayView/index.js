@@ -3,13 +3,35 @@ import React, { useState } from 'react'
 export default function DayView() {
     const [submitted, setSubmitted] = useState(false);
 
+    function getTheDate(){
+        const currentDate = new Date();
+
+        const year = currentDate.getFullYear() % 100; // Get the current year (e.g., 2023)
+        const month = currentDate.getMonth() + 1; // Get the current month (January is 0, so add 1)
+        const day = currentDate.getDate(); // Get the current day of the month
+        
+        // Format the date components if needed (to ensure double digits for month/day if < 10)
+        const formattedMonth = month < 10 ? `0${month}` : month;
+        const formattedDay = day < 10 ? `0${day}` : day;
+        
+        // Create a string in the format YYYY-MM-DD
+        const formattedDate = `${formattedDay}${formattedMonth}${year}`;
+        console.log(formattedDate); // Output: e.g., "181123"
+        return formattedDate
+    }
+
     function handleSubmit(e){
         e.preventDefault();
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
         console.log(data);
+        const date= getTheDate();
+        const dataToSend = {date: date, ...data};
+        console.log("dataToSend", dataToSend)
         setSubmitted(true);
     }
+
+
   return (
     <>
     <form onSubmit={handleSubmit}>
