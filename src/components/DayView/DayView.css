@@ -1,6 +1,8 @@
+
 body{
     margin: 0;
     padding: 0;
+    background: #F6F6F6;
 }
 
 form{
@@ -12,3 +14,31 @@ padding-bottom: 50px;
     display: block;
     margin-bottom: 150px;
 }
+
+
+  div {
+    text-align: center;
+  }
+
+  .question {
+    margin-top: 20px;
+    background-color: #dec0f6;
+    border-radius: 10px;
+    color: black;
+  }
+
+
+  .button {
+    margin-top: 30px;
+  }
+
+  p {
+    font-size: 20px;
+  }
+  
+  label:hover {
+    background-color: darkorchid;
+    border-radius: 5px;
+    width: 30px;
+    height: 10px;
+  }

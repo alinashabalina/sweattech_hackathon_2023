@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import "./DayView.css"
+<<<<<<< HEAD
+=======
+
+>>>>>>> 402be40 (commit)
 export default function DayView() {
     const [submitted, setSubmitted] = useState(false);
 
@@ -35,12 +39,15 @@ export default function DayView() {
   return (
     <>
     <form onSubmit={handleSubmit}>
+      <div class="question">
         <p>Did your period start on time?</p>
        <input type="radio" id="yes" name="periodDay" value={true} />
         <label htmlFor="yes">Yes</label><br/>
         <input type="radio" id="no" name="periodDay" value={false} />
        <label htmlFor="no">No</label><br/>
+       </div>
 
+       <div class="question">
        <p>What's your energy level?</p>
        <input type="radio" id="energetic" name="dayEnergy" value="energetic" />
         <label htmlFor="energetic">energetic</label><br/>
@@ -50,15 +57,21 @@ export default function DayView() {
         <label htmlFor="relaxed">relaxed</label><br/>
         <input type="radio" id="tired" name="dayEnergy" value="tired" />
        <label htmlFor="tired">tired</label><br/>
-
+       </div>
+ 
+       <div class="question">
        <p>Where do you prefer to work out?</p>
        <input type="radio" id="home" name="trainingType" value="home" />
         <label htmlFor="home">At home</label><br/>
         <input type="radio" id="gym" name="trainingType" value="gym" />
        <label htmlFor="gym">At the gym</label><br/>
         <input type="radio" id="skip" name="trainingType" value="skip" />
-       <label htmlFor="skip">Skip for today</label><br/>
-       <button type='submit'>Submit</button>
+       <label htmlFor="skip">Skip for today</label>
+       <br/>
+       </div>
+       
+
+       <button class="button" type='submit'>Submit</button>
     </form>
     {submitted && 
     <>
