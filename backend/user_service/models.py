@@ -22,3 +22,5 @@ class User(db.Model):
             "email": self.email,
             "password": self.password
         }
+
+

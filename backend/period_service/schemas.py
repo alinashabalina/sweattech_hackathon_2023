@@ -10,7 +10,7 @@ class ValidationSchemas:
             },
             "day_energy": {
                 "type": "string",
-                "enum": ["energetic", "strong", "weak", "tired"]
+                "enum": ["energetic", "strong", "low", "tired"]
             },
             "period_day_correct": {
                 "type": "boolean"

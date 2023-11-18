@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
 
 db = SQLAlchemy()
 
@@ -28,4 +29,29 @@ class DayView(db.Model):
             "period_day_set": self.period_day_set,
             "training_type": self.training_type,
             "feedback": self.feedback
+        }
+
+
+class Trainings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    energy_level = db.Column(db.String(255))
+    link = db.Column(db.String)
+
+    def training_info(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "energy_level": self.energy_level
+        }
+
+
+class TrainingRecommendations(db.Model):
+    id = db.Column(db.Integer, ForeignKey("trainings.id"))
+    user_id = db.Column(db.Integer, ForeignKey("dayview.user_id"))
+
+    def training_recommended(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id
         }
