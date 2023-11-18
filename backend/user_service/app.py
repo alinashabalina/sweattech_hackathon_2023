@@ -4,6 +4,7 @@ import sqlalchemy
 
 from flask_migrate import Migrate
 from flask import Flask, jsonify, request
+from sqlalchemy import select
 
 from models import init_app, db, User
 from schemas import ValidationSchemas
