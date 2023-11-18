@@ -16,35 +16,30 @@ export default function Form() {
         // setUserData({...userData, : newdata})
         console.log(data);
     }
-
+ 
   return (
     <form onSubmit={handleSubmit}>
-        {/* {question === 1 &&
-        <> */}
-        <label htmlFor="dateOfBirth">Date of Birth</label>
+        <section>
+        <label htmlFor="dateOfBirth">Date of Birth</label><br/>
         <input type="date" id='dateOfBirth' name='dateOfBirth' />
-        {/* <button type="submit">next</button> */}
-        {/* </>}
-        {question === 2 &&
-        <> */}
-        <label htmlFor="hormoneState">Which hormone state would you say you are in now?</label>
+        </section>
+        <section>
+        <label htmlFor="hormoneState">Which hormone state would you say you are in now?</label><br/>
         <select id='hormoneState' name='hormoneState'>
         <option value="">-- Choose --</option>
         <option value="menstruation">menstruation</option>
         <option value="pregnancy">pregnancy</option>
         <option value="menopause">menopause</option>
         </select>
-        {/* <button type='submit'>next</button> */}
-        {/* </>}
-        {question === 3 &&
-        <> */}
-        <label htmlFor="dayOfCycle">Which day in your cycle are you in now?</label>
+        </section>
+
+        <section>
+        <label htmlFor="dayOfCycle">Which day in your cycle are you in now?</label><br/>
         <input type="number" id='dayOfCycle' name='dayOfCycle' min="1" max="28" />
-        {/* <button type='submit'>next</button> */}
-        {/* </>}
-        {question === 4 &&
-        <> */}
-        <label htmlFor="goal">What is your primary goal of working out?</label>
+        </section>
+
+        <section>
+        <label htmlFor="goal">What is your primary goal of working out?</label><br/>
         <select id='goal' name='goal'>
         <option value="">-- Choose --</option>
         <option value="weightloss">healthy weight loss</option>
@@ -53,9 +48,9 @@ export default function Form() {
         <option value="mobility">mobility and flexibility</option>
         <option value="stamina">stamina and endurance</option>
         </select>
-        
+        </section>
+
         <button type='submit'>Submit</button>
-        {/* </>} */}
     </form>
   )
 }

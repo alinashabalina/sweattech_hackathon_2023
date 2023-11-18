@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import "./DayView.css"
 export default function DayView() {
     const [submitted, setSubmitted] = useState(false);
 
